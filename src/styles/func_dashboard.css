@@ -1,0 +1,338 @@
+/* Dashboard Container */
+.dashboard-container {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  background:var(--e-global-color-4f4edc7) ;
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.dashboard-header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.current-time {
+  font-size: 0.9rem;
+  color: black;
+  font-weight: 600;
+  background: #f8fafc;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  border: 1px solid var(--e-global-color-6844326);
+}
+
+/* Stats Grid - Design Limpo e Compacto */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  text-align: center;
+  transition: all 0.2s ease;
+  border: 1px solid #f1f5f9;
+  position: relative;
+}
+
+.stat-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--e-global-color-cbda211);
+  border-radius: 6px 6px 0 0;
+}
+
+.stat-card h3 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--e-global-color-4f4edc7);
+  margin: 0.25rem 0;
+  line-height: 1.2;
+  font-family: 'Courier New', monospace;
+}
+
+.stat-label {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* Ícones suaves para os cards */
+.stat-card:nth-child(1)::after {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 1rem;
+  opacity: 0.2;
+}
+
+.stat-card:nth-child(2)::after {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 1rem;
+  opacity: 0.2;
+}
+
+.stat-card:nth-child(3)::after {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 1rem;
+  opacity: 0.2;
+}
+
+.stat-card:nth-child(4)::after {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 1rem;
+  opacity: 0.2;
+}
+
+/* Dashboard Sections - Mais Suave */
+.dashboard-section {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
+  border: 1px solid #f1f5f9;
+}
+
+.dashboard-section h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--e-global-color-4f4edc7);
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dashboard-section h2::before {
+  content: '';
+  width: 3px;
+  height: 18px;
+  background: var(--e-global-color-6844326);
+  border-radius: 2px;
+}
+
+/* Markings List - Mais Compacto */
+.markings-list {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.marking-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.marking-item:last-child {
+  border-bottom: none;
+}
+
+.marking-item:hover {
+  background: #f8fafc;
+}
+
+.marking-type {
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.marking-type::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.marking-type.entrada { color: var(--e-global-color-accent); }
+.marking-type.entrada::before { background: var(--e-global-color-accent); }
+
+.marking-type.saida { color: #dc3545; }
+.marking-type.saida::before { background: #dc3545; }
+
+.marking-type.pausa_inicio { color: #f59e0b; }
+.marking-type.pausa_inicio::before { background: #f59e0b; }
+
+.marking-type.pausa_fim { color: var(--e-global-color-cbda211); }
+.marking-type.pausa_fim::before { background: var(--e-global-color-cbda211); }
+
+.marking-time {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--e-global-color-4f4edc7);
+  font-family: 'Courier New', monospace;
+  background: #f8fafc;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.marking-location {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  text-align: right;
+}
+
+.no-markings {
+  text-align: center;
+  padding: 1.5rem;
+  color: #94a3b8;
+  font-style: italic;
+  background: #f8fafc;
+  font-size: 0.9rem;
+}
+
+.no-markings::before {
+  font-size: 1.25rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  opacity: 0.4;
+}
+
+/* Calendar Placeholder - Mais Simples */
+.calendar-placeholder {
+  text-align: center;
+  padding: 1.5rem;
+  color: #64748b;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #e2e8f0;
+}
+
+.calendar-placeholder i {
+  font-size: 1.5rem;
+  color: var(--e-global-color-6844326);
+  margin-bottom: 0.5rem;
+  display: block;
+  opacity: 0.6;
+}
+
+.calendar-placeholder p {
+  font-size: 0.9rem;
+  margin: 0 0 0.25rem 0;
+  font-weight: 500;
+  color: var(--e-global-color-4f4edc7);
+}
+
+.calendar-placeholder small {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* ===== RESPONSIVIDADE DASHBOARD ===== */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+  }
+  
+  .dashboard-header {
+    padding: 1.25rem;
+  }
+  
+  .marking-item {
+    grid-template-columns: 1fr auto;
+    gap: 0.875rem;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-card {
+    padding: 1rem;
+  }
+  
+  .dashboard-section {
+    padding: 1rem;
+  }
+  
+  .marking-item {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .marking-time {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
+  .dashboard-header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  
+  .stat-card {
+    padding: 0.875rem;
+  }
+  
+  .stat-value {
+    font-size: 1.25rem;
+  }
+}
