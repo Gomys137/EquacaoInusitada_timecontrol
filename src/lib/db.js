@@ -12,7 +12,7 @@ export async function connectToDatabase() {
       user: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      ssl: { rejectUnauthorized: true }, // Aiven exige SSL
+     ssl: { rejectUnauthorized: false }, // Aiven exige SSL
       waitForConnections: true,
       connectionLimit: 5,
     });
