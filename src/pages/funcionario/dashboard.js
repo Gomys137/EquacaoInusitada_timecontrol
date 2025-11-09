@@ -35,15 +35,18 @@ function DashboardFuncionario() {
       const now = new Date();
       const lastMarking = todayMarkings[todayMarkings.length - 1];
 
-      if (lastMarking && lastMarking.type === 'saida') {
-        const lastMarkingDate = new Date(lastMarking.timestamp);
-        const isDifferentDay = lastMarkingDate.getDate() !== now.getDate() ||
-          lastMarkingDate.getMonth() !== now.getMonth() ||
-          lastMarkingDate.getFullYear() !== now.getFullYear();
-        setIsNewDay(isDifferentDay);
-      } else {
+      if (!lastMarking) {
         setIsNewDay(true);
+        return;
       }
+
+      const lastMarkingDate = new Date(lastMarking.timestamp);
+      const isDifferentDay =
+        lastMarkingDate.getDate() !== now.getDate() ||
+        lastMarkingDate.getMonth() !== now.getMonth() ||
+        lastMarkingDate.getFullYear() !== now.getFullYear();
+
+      setIsNewDay(isDifferentDay);
     };
 
     checkNewDay();
