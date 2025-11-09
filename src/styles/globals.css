@@ -1,35 +1,6 @@
-<<<<<<< HEAD
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
   background-color: #f4f6f8;
 }
-=======
-:root {
-    --e-global-color-primary: #6EC1E4;
-    --e-global-color-secondary: #54595F;
-    --e-global-color-text: #7A7A7A;
-    --e-global-color-accent: #61CE70;
-    --e-global-color-90b611d: #2B416A;
-    --e-global-color-cbda211: #2072AC;
-    --e-global-color-6844326: #F3C80B;
-    --e-global-color-2703930: #FFFFFF;
-    --e-global-color-f4b0bb7: #000000;
-    --e-global-color-4f4edc7: #232C3D;
-    --wp--preset--color--vivid-cyan-blue: #0073E5;
-}
-
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Archivo', sans-serif;
-}
-
-body {
-    background-color: #f9fafb;
-    color: #111827;
-}
->>>>>>> 531ceaf518ea6734da3d040e62bfcc1eb7ae4cf4
