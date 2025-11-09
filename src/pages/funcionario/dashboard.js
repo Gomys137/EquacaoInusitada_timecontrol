@@ -378,13 +378,14 @@ function TimeTracker({ onMarking, todayMarkings, currentTime, isNewDay }) {
     const last = todayMarkings[todayMarkings.length - 1];
     const lastType = (last.type || '').toLowerCase().trim();
 
-    if (lastType === 'entrada') {
+    if (['entrada', 'in', 'checkin', 'inicio', 'start'].includes(lastType)) {
       setNextAction('saida');
-    } else if (lastType === 'saida') {
+    } else if (['saida', 'out', 'checkout', 'fim', 'end'].includes(lastType)) {
       setNextAction('dia_encerrado');
     } else {
       setNextAction('entrada');
     }
+
   }, [todayMarkings, isNewDay]);
 
 
