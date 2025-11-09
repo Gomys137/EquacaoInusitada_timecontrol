@@ -371,24 +371,22 @@ function TimeTracker({ onMarking, todayMarkings, currentTime, isNewDay }) {
 
   useEffect(() => {
     if (isNewDay || todayMarkings.length === 0) {
-      // Novo dia, nenhuma marcação → mostrar “Iniciar Trabalho”
       setNextAction('entrada');
       return;
     }
 
     const last = todayMarkings[todayMarkings.length - 1];
+    const lastType = (last.type || '').toLowerCase().trim();
 
-    if (last.type === 'entrada') {
-      // Última foi entrada → deve permitir saída
+    if (lastType === 'entrada') {
       setNextAction('saida');
-    } else if (last.type === 'saida') {
-      // Última foi saída → dia encerrado
+    } else if (lastType === 'saida') {
       setNextAction('dia_encerrado');
     } else {
-      // fallback
       setNextAction('entrada');
     }
   }, [todayMarkings, isNewDay]);
+
 
   async function handleMark() {
     if (loading || nextAction === 'dia_encerrado') return;
