@@ -1,0 +1,467 @@
+/* Time Tracker - Design Ultra Responsivo */
+.time-tracker {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 1px solid #f1f5f9;
+}
+
+/* Header - Compacto para Mobile */
+.tracker-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--e-global-color-4f4edc7);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--e-global-color-6844326);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--e-global-color-4f4edc7);
+  flex-shrink: 0;
+}
+
+.header-info h2 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color:white;
+}
+
+.current-time-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  background: #f8fafc;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  color: var(--e-global-color-4f4edc7);
+  border: 1px solid #e2e8f0;
+}
+
+/* Status Indicator - Compacto */
+.status-indicator {
+  display: flex;
+  justify-content: center;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.8rem;
+  background: var(--e-global-color-4f4edc7);
+}
+
+.status-badge i {
+  font-size: 0.9rem;
+}
+
+/* Botão Principal - REDUZIDO para Mobile */
+.tracker-body {
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+
+.mark-button {
+  background: var(--e-global-color-cbda211);
+  color: white;
+  border: none;
+  padding: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(32, 114, 172, 0.2);
+  overflow: hidden;
+  min-height: 60px;
+  touch-action: manipulation;
+}
+
+.mark-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(32, 114, 172, 0.3);
+}
+
+.mark-button:active {
+  transform: translateY(0);
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  padding: 0.875rem 1.25rem;
+  gap: 0.75rem;
+  height: 100%;
+}
+
+.button-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.button-text {
+  text-align: left;
+  flex: 1;
+}
+
+.button-main-text {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.125rem;
+  line-height: 1.2;
+}
+
+.button-sub-text {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+/* Footer com Notificações - Stack no Mobile */
+.tracker-footer {
+  padding: 1rem;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.notification-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.notification-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.notification-icon.success {
+  background: var(--e-global-color-accent);
+}
+
+.notification-icon.info {
+  background: var(--e-global-color-cbda211);
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title {
+  display: block;
+  font-weight: 600;
+  color: var(--e-global-color-4f4edc7);
+  font-size: 0.85rem;
+  margin-bottom: 0.125rem;
+}
+
+.notification-desc {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Última Marcação - Compacta */
+.last-marking {
+  padding: 1rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.last-marking-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.last-marking-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.marking-type {
+  font-weight: 600;
+  color: var(--e-global-color-4f4edc7);
+  font-size: 0.85rem;
+}
+
+.marking-time {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--e-global-color-cbda211);
+  font-size: 0.8rem;
+}
+
+/* ===== RESPONSIVIDADE ESPECÍFICA ===== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .tracker-header {
+    padding: 1rem;
+  }
+  
+  .tracker-body {
+    padding: 1rem;
+  }
+  
+  .button-content {
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Mobile - BOTÃO MAIS COMPACTO */
+@media (max-width: 768px) {
+  .time-tracker {
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+  
+  .tracker-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  
+  .header-main {
+    gap: 0.5rem;
+  }
+  
+  .header-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+  
+  .header-info h2 {
+    font-size: 0.95rem;
+  }
+  
+  .current-time-display {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .tracker-body {
+    padding: 0.875rem 0.75rem;
+  }
+  
+  /* BOTÃO REDUZIDO - Mobile */
+  .mark-button {
+    min-height: 55px;
+    border-radius: 10px;
+    max-width: 280px;
+  }
+  
+  .button-content {
+    padding: 0.625rem 0.875rem;
+    gap: 0.5rem;
+  }
+  
+  .button-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+  
+  .button-main-text {
+    font-size: 0.9rem;
+  }
+  
+  .button-sub-text {
+    font-size: 0.7rem;
+  }
+  
+  .tracker-footer {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  .notification-item {
+    padding: 0.75rem;
+  }
+  
+  .notification-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Mobile (até 480px) - BOTÃO AINDA MAIS COMPACTO */
+@media (max-width: 480px) {
+  .time-tracker {
+    border-radius: 8px;
+  }
+  
+  .tracker-header {
+    padding: 0.75rem;
+  }
+  
+  .header-main {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .current-time-display {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .tracker-body {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  /* BOTÃO MÍNIMO - Mobile Pequeno */
+  .mark-button {
+    min-height: 50px;
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .button-content {
+    flex-direction: row;
+    text-align: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .button-text {
+    text-align: left;
+  }
+  
+  .button-main-text {
+    font-size: 0.85rem;
+  }
+  
+  .button-sub-text {
+    font-size: 0.65rem;
+  }
+  
+  .last-marking-content {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .notification-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .notification-content {
+    text-align: center;
+  }
+}
+
+/* Landscape Mobile - Botão compacto horizontal */
+@media (max-height: 500px) and (orientation: landscape) {
+  .time-tracker {
+    margin-bottom: 0.75rem;
+  }
+  
+  .tracker-header {
+    padding: 0.75rem;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .header-main {
+    flex-direction: row;
+  }
+  
+  .tracker-body {
+    padding: 0.75rem;
+  }
+  
+  .mark-button {
+    min-height: 48px;
+    max-width: 250px;
+  }
+  
+  .button-content {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .button-main-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* High DPI e Touch Optimization */
+@media (hover: none) and (pointer: coarse) {
+  .mark-button {
+    min-height: 60px; /* Um pouco maior apenas para touch */
+  }
+}
+
+/* Prevenir zoom em iOS */
+@supports (-webkit-touch-callout: none) {
+  .mark-button {
+    font-size: 16px;
+  }
+}
