@@ -32,20 +32,42 @@ async function handler(req, res) {
     );
 
     // Função para calcular horas (entrada/saída)
+    // Função para calcular horas (entrada/saída)
     const calcHours = (rows) => {
       let total = 0;
       let entrada = null;
+      let saidaFinal = null;
+
       rows.forEach((r) => {
-        if (r.type === 'entrada') entrada = new Date(r.timestamp);
-        else if (r.type === 'saida' && entrada) {
-          total += new Date(r.timestamp) - entrada;
+        if (r.type === 'entrada') {
+          entrada = new Date(r.timestamp);
+        } else if (r.type === 'saida' && entrada) {
+          const saida = new Date(r.timestamp);
+          total += saida - entrada;
           entrada = null;
+          saidaFinal = saida; // guarda a última saída do dia
         }
       });
+
+      // 🔹 Subtrai 1h de almoço *apenas se saiu depois das 13:00*
+      if (saidaFinal) {
+        const horaSaida = saidaFinal.getHours();
+        const minutoSaida = saidaFinal.getMinutes();
+
+        // se saiu depois das 13:00 (ou 13:00:01+)
+        if (horaSaida > 13 || (horaSaida === 13 && minutoSaida > 0)) {
+          total -= 60 * 60 * 1000; // subtrai 1h em milissegundos
+        }
+      }
+
+      // Evita valores negativos (por precaução)
+      if (total < 0) total = 0;
+
       const horas = Math.floor(total / 1000 / 60 / 60);
       const minutos = Math.floor((total / 1000 / 60) % 60);
       return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}`;
     };
+
 
     const todayHours = calcHours(todayRows);
     const weekHours = calcHours(weekRows);
