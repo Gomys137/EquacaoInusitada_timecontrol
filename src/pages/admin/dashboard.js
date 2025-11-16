@@ -42,7 +42,7 @@ function AdminDashboard() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Erro ao carregar marcações');
-      
+
       const allMarks = [];
       for (const date in data.markings) {
         data.markings[date].forEach(m =>
@@ -57,7 +57,7 @@ function AdminDashboard() {
           })
         );
       }
-      
+
       const sortedMarks = allMarks.sort((a, b) => b.timestamp - a.timestamp);
       setMarkings(sortedMarks);
       applyMarkingsFilters(sortedMarks, dateFilter, employeeFilter);
@@ -71,19 +71,19 @@ function AdminDashboard() {
 
   const applyMarkingsFilters = (marks, daysFilter, employeeNameFilter) => {
     let filtered = [...marks];
-    
+
     if (daysFilter !== 'all') {
       const daysAgo = new Date();
       daysAgo.setDate(daysAgo.getDate() - parseInt(daysFilter));
       filtered = filtered.filter(mark => mark.timestamp >= daysAgo);
     }
-    
+
     if (employeeNameFilter) {
       filtered = filtered.filter(mark =>
         mark.employee_name.toLowerCase().includes(employeeNameFilter.toLowerCase())
       );
     }
-    
+
     setFilteredMarkings(filtered.slice(0, 100));
   };
 
@@ -98,7 +98,7 @@ function AdminDashboard() {
       const token = localStorage.getItem('token');
       const res = await fetch('/api/admin/update-rate', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
@@ -152,7 +152,7 @@ function AdminDashboard() {
       <div style={styles.errorContainer}>
         <div style={styles.errorIcon}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
         </div>
         <p style={styles.errorText}>{error}</p>
@@ -188,13 +188,13 @@ function AdminDashboard() {
           <div style={styles.searchCard}>
             <div style={styles.searchHeader}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2072ac" style={styles.searchTitleIcon}>
-                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <h3 style={styles.searchTitle}>Procurar Funcionários</h3>
             </div>
             <div style={styles.searchInputContainer}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" style={styles.searchIcon}>
-                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
                 type="text"
@@ -204,12 +204,12 @@ function AdminDashboard() {
                 style={styles.searchInput}
               />
               {query && (
-                <button 
+                <button
                   onClick={() => setQuery('')}
                   style={styles.clearButton}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M18 6L6 18M6 6l12 12"/>
+                    <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                 </button>
               )}
@@ -227,8 +227,8 @@ function AdminDashboard() {
           <div style={styles.cardHeader}>
             <div style={styles.cardTitleSection}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2072ac" style={styles.cardIcon}>
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
               </svg>
               <h2 style={styles.cardTitle}>Funcionários</h2>
             </div>
@@ -245,13 +245,14 @@ function AdminDashboard() {
             <table style={styles.table}>
               <thead>
                 <tr>
+                  <th style={styles.th}>Data</th>
                   <th style={styles.th}>Funcionário</th>
-                  <th style={styles.th}>Horas</th>
-                  <th style={styles.th}>Extra</th>
-                  <th style={styles.th}>€/Hora</th>
-                  <th style={styles.th}>Total</th>
+                  <th style={styles.th}>Tipo</th>
+                  <th style={styles.th}>Hora</th>
+                  <th style={styles.th}>Localização</th>   {/* ADICIONADO */}
                 </tr>
               </thead>
+
               <tbody>
                 {filtered.map(emp => (
                   <tr key={emp.employee_id} style={styles.tr}>
@@ -293,6 +294,35 @@ function AdminDashboard() {
                     <td style={styles.totalCell}>
                       <span style={styles.totalValue}>€{Number(emp.total_pay || 0).toFixed(2)}</span>
                     </td>
+                    <td style={styles.td}>
+                      <details style={styles.locationDropdown}>
+                        <summary style={styles.locationSummary}>
+                          Ver localização
+                        </summary>
+
+                        {m.location ? (
+                          <div style={styles.locationBox}>
+                            <div style={styles.locationText}>
+                              {m.location}
+                            </div>
+
+                            <a
+                              href={`https://www.google.com/maps?q=${m.latitude},${m.longitude}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={styles.mapButton}
+                            >
+                              Abrir no Google Maps
+                            </a>
+                          </div>
+                        ) : (
+                          <span style={{ color: '#6b7280', fontSize: '12px' }}>
+                            Sem localização
+                          </span>
+                        )}
+                      </details>
+                    </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -302,12 +332,12 @@ function AdminDashboard() {
           {filtered.length === 0 && (
             <div style={styles.emptyState}>
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#94a3b8">
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
               </svg>
               <p style={styles.emptyText}>Nenhum funcionário encontrado</p>
               {query && (
-                <button 
+                <button
                   onClick={() => setQuery('')}
                   style={styles.clearSearchButton}
                 >
@@ -323,7 +353,7 @@ function AdminDashboard() {
           <div style={styles.markingsHeader}>
             <div style={styles.cardTitleSection}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2072ac" style={styles.cardIcon}>
-                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <h2 style={styles.cardTitle}>Marcações</h2>
             </div>
@@ -334,11 +364,11 @@ function AdminDashboard() {
               <span style={styles.toggleIcon}>
                 {showMarkings ? (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M19 9l-7 7-7-7"/>
+                    <path d="M19 9l-7 7-7-7" />
                   </svg>
                 ) : (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M9 5l7 7-7 7"/>
+                    <path d="M9 5l7 7-7 7" />
                   </svg>
                 )}
               </span>
@@ -352,7 +382,7 @@ function AdminDashboard() {
               <div style={styles.filtersCard}>
                 <div style={styles.filtersHeader}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2072ac">
-                    <path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"/>
+                    <path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
                   </svg>
                   <h4 style={styles.filtersTitle}>Filtros</h4>
                 </div>
@@ -360,12 +390,12 @@ function AdminDashboard() {
                   <div style={styles.filterGroup}>
                     <label style={styles.filterLabel}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" style={styles.filterIcon}>
-                        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                       Período
                     </label>
-                    <select 
-                      value={dateFilter} 
+                    <select
+                      value={dateFilter}
                       onChange={(e) => setDateFilter(e.target.value)}
                       style={styles.filterSelect}
                     >
@@ -375,12 +405,12 @@ function AdminDashboard() {
                       <option value="all">Todo o período</option>
                     </select>
                   </div>
-                  
+
                   <div style={styles.filterGroup}>
                     <label style={styles.filterLabel}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" style={styles.filterIcon}>
-                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
+                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
                       </svg>
                       Funcionário
                     </label>
@@ -393,12 +423,12 @@ function AdminDashboard() {
                         style={styles.filterInput}
                       />
                       {employeeFilter && (
-                        <button 
+                        <button
                           onClick={() => setEmployeeFilter('')}
                           style={styles.filterClearButton}
                         >
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M18 6L6 18M6 6l12 12"/>
+                            <path d="M18 6L6 18M6 6l12 12" />
                           </svg>
                         </button>
                       )}
@@ -458,15 +488,15 @@ function AdminDashboard() {
                       ))}
                     </tbody>
                   </table>
-                  
+
                   {filteredMarkings.length === 0 && (
                     <div style={styles.emptyState}>
                       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#94a3b8">
-                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       <p style={styles.emptyText}>Nenhuma marcação encontrada</p>
                       {(dateFilter !== 'all' || employeeFilter) && (
-                        <button 
+                        <button
                           onClick={() => {
                             setDateFilter('all');
                             setEmployeeFilter('');
@@ -478,11 +508,11 @@ function AdminDashboard() {
                       )}
                     </div>
                   )}
-                  
+
                   {filteredMarkings.length >= 100 && (
                     <div style={styles.limitWarning}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b">
-                        <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z" />
                       </svg>
                       <span>Mostrando os 100 registros mais recentes</span>
                     </div>
@@ -776,6 +806,43 @@ const styles = {
     color: '#2072ac',
     fontSize: '14px',
   },
+
+  locationDropdown: {
+  cursor: 'pointer',
+},
+
+locationSummary: {
+  color: '#2072ac',
+  fontWeight: '600',
+  fontSize: '13px',
+  cursor: 'pointer',
+  listStyle: 'none',
+},
+
+locationBox: {
+  marginTop: '8px',
+  padding: '10px',
+  borderRadius: '8px',
+  backgroundColor: '#f8fafc',
+  border: '1px solid #e2e8f0',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px'
+},
+
+locationText: {
+  fontSize: '13px',
+  color: '#475569',
+  lineHeight: '1.3',
+},
+
+mapButton: {
+  fontSize: '12px',
+  fontWeight: '600',
+  color: '#2072ac',
+  textDecoration: 'underline',
+  cursor: 'pointer'
+},
 
   // Marcações
   markingsHeader: {
