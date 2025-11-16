@@ -9,11 +9,11 @@ export default async function handler(req, res) {
   try {
     const db = await connectToDatabase();
 
-    // Junta funcionários + horas mensais
     const [rows] = await db.execute(`
       SELECT 
         e.id AS employee_id,
         e.name AS employee_name,
+        e.role,
         COALESCE(s.total_hours, 0) AS total_hours,
         COALESCE(s.overtime_hours, 0) AS overtime_hours,
         COALESCE(e.hour_rate, 0) AS hour_rate
@@ -24,7 +24,6 @@ export default async function handler(req, res) {
       ORDER BY e.name ASC
     `);
 
-    // Calcular pagamento
     const data = rows.map(r => ({
       ...r,
       total_pay: (r.total_hours * r.hour_rate).toFixed(2),
