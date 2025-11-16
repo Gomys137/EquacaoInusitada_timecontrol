@@ -80,71 +80,98 @@ function DashboardFuncionario() {
 
 
   const handleMarking = async (type) => {
+    const token = localStorage.getItem("token");
+
+    if (!navigator.geolocation) {
+      showNotification("O seu navegador não suporta geolocalização.", "error");
+      return;
+    }
+
+    let latitude, longitude;
+
+    // 🔹 1. ISOLAMOS O GEOLOCATION
     try {
-      const token = localStorage.getItem('token');
-
-      // 🔹 1. Verifica se o navegador suporta geolocalização
-      if (!navigator.geolocation) {
-        showNotification('Ative a localização para marcar a hora.', 'error');
-        return;
-      }
-
-      // 🔹 2. Obter coordenadas
       const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-        });
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          reject,
+          {
+            enableHighAccuracy: true,
+            timeout: 15000,
+          }
+        );
       });
 
-      const { latitude, longitude } = position.coords;
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
 
-      // 🔹 3. Converter lat/lng em morada (opcional mas recomendado)
-      const address = await getAddressFromCoords(latitude, longitude);
+      console.log("✔ GEO OK:", latitude, longitude);
+    } catch (geoErr) {
+      console.error("❌ ERRO GEO:", geoErr);
 
-      // 🔹 4. Enviar tudo para o backend
-      const res = await fetch('/api/employee/mark-time', {
-        method: 'POST',
+      if (geoErr.code === 1) {
+        showNotification("Permissão negada! Ativa a localização.", "error");
+      } else if (geoErr.code === 2) {
+        showNotification("Localização indisponível! Liga o WiFi/GPS.", "error");
+      } else if (geoErr.code === 3) {
+        showNotification("Timeout ao obter localização.", "error");
+      } else {
+        showNotification("Erro desconhecido ao obter geolocalização.", "error");
+      }
+
+      return; // PARA AQUI porque falhou a GEOLOCALIZAÇÃO
+    }
+
+    // 🔹 2. SE CHEGAR AQUI, GEOLOCALIZAÇÃO FUNCIONA
+    let address = null;
+
+    try {
+      // MUITO IMPORTANTE: User-Agent para evitar bloqueio Nominatim
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+        {
+          headers: {
+            "User-Agent": "TimeControlApp/1.0 (admin@empresa.com)",
+            "Accept-Language": "pt-PT"
+          }
+        }
+      );
+
+      const data = await res.json();
+      address = data.display_name || null;
+    } catch (err) {
+      console.error("❌ ERRO NO REVERSE GEOCODING:", err);
+      address = null; // fallback
+    }
+
+    // 🔹 3. Enviar a marcação ao backend
+    try {
+      const res = await fetch("/api/employee/mark-time", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           type,
           latitude,
           longitude,
-          address
+          address,
         }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        showNotification(data.message, 'success');
+        showNotification(data.message, "success");
         loadMarkings();
       } else {
-        showNotification(data.message || 'Erro ao marcar hora', 'error');
+        showNotification(data.message || "Erro ao marcar hora", "error");
       }
     } catch (err) {
-      console.error("🔴 ERRO AO MARCAR:", err);
-      console.error("🔍 Código:", err.code);
-      console.error("💬 Mensagem:", err.message);
-
-      let msg = "";
-
-      if (err.code === 1) {
-        msg = "Permissão negada! Ativa a localização para este site.";
-      } else if (err.code === 2) {
-        msg = "Localização indisponível! Liga o WiFi ou ativa o GPS.";
-      } else if (err.code === 3) {
-        msg = "Timeout! O dispositivo demorou demasiado a obter a localização.";
-      } else {
-        msg = "Erro inesperado ao obter localização.";
-      }
-
-      showNotification(msg, 'error');
+      console.error("❌ ERRO AO ENVIAR PARA O BACKEND:", err);
+      showNotification("Erro interno ao comunicar com o servidor.", "error");
     }
-
   };
 
 
