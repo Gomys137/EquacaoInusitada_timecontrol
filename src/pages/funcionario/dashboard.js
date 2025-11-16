@@ -64,19 +64,54 @@ function DashboardFuncionario() {
       console.error('Erro ao carregar marcações:', err);
     }
   };
+  async function getAddressFromCoords(lat, lng) {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+    );
+    const data = await res.json();
+    return data.display_name || null;
+  }
 
   const handleMarking = async (type) => {
     try {
       const token = localStorage.getItem('token');
+
+      // 🔹 1. Verifica se o navegador suporta geolocalização
+      if (!navigator.geolocation) {
+        showNotification('Ative a localização para marcar a hora.', 'error');
+        return;
+      }
+
+      // 🔹 2. Obter coordenadas
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+        });
+      });
+
+      const { latitude, longitude } = position.coords;
+
+      // 🔹 3. Converter lat/lng em morada (opcional mas recomendado)
+      const address = await getAddressFromCoords(latitude, longitude);
+
+      // 🔹 4. Enviar tudo para o backend
       const res = await fetch('/api/employee/mark-time', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ type }),
+        body: JSON.stringify({
+          type,
+          latitude,
+          longitude,
+          address
+        }),
       });
+
       const data = await res.json();
+
       if (res.ok) {
         showNotification(data.message, 'success');
         loadMarkings();
@@ -85,9 +120,10 @@ function DashboardFuncionario() {
       }
     } catch (err) {
       console.error('Erro ao marcar hora:', err);
-      showNotification('Erro ao marcar hora', 'error');
+      showNotification('Ative a localização para marcar a hora.', 'error');
     }
   };
+
 
   const showNotification = (message, type) => {
     const notification = document.createElement('div');

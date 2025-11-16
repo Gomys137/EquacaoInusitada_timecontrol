@@ -49,6 +49,7 @@ function AdminMarcacoes() {
                     <table style={styles.table}>
                         <thead>
                             <tr>
+                                <th style={styles.th}>Localização</th>
                                 <th>Funcionário</th>
                                 <th>Tipo</th>
                                 <th>Hora</th>
@@ -69,6 +70,24 @@ function AdminMarcacoes() {
                                     </td>
                                 </tr>
                             ))}
+                            <td style={styles.td}>
+                                {m.location ? (
+                                    <>
+                                        <div>{m.location}</div>
+                                        <a
+                                            href={`https://www.google.com/maps?q=${m.latitude},${m.longitude}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ color: '#2072ac', fontSize: '12px', fontWeight: '600' }}
+                                        >
+                                            Ver no mapa
+                                        </a>
+                                    </>
+                                ) : (
+                                    <span style={{ color: '#94a3b8', fontSize: '12px' }}>Sem localização</span>
+                                )}
+                            </td>
+
                         </tbody>
                     </table>
                 </div>

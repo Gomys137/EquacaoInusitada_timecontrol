@@ -18,15 +18,23 @@ export default async function handler(req, res) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     const { id: employeeId } = decoded;
-    const { type } = req.body;
+
+    const { type, latitude, longitude, address } = req.body;
 
     if (!['entrada', 'saida'].includes(type)) {
       return res.status(400).json({ message: 'Tipo inválido' });
     }
 
+    // 🔹 Validação mínima da localização
+    if (!latitude || !longitude) {
+      return res.status(400).json({
+        message: 'A localização é obrigatória para marcar a hora.',
+      });
+    }
+
     const db = await connectToDatabase();
 
-    // 🔹 BLOQUEIO: só pode marcar uma "entrada" e uma "saída" por dia
+    // 🔹 BLOQUEIO: apenas uma entrada e uma saída por dia
     const todayStart = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss');
     const todayEnd = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss');
 
@@ -50,16 +58,22 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Já marcaste saída hoje!' });
     }
 
-    // 🔹 Grava a marcação
+    // ======================================================
+    // 🔹 INSERIR MARCAÇÃO COM LOCALIZAÇÃO
+    // ======================================================
     await db.execute(
-      'INSERT INTO markings (employee_id, type, timestamp) VALUES (?, ?, NOW())',
-      [employeeId, type]
+      `INSERT INTO markings (employee_id, type, timestamp, latitude, longitude, location)
+       VALUES (?, ?, NOW(), ?, ?, ?)`,
+      [employeeId, type, latitude, longitude, address || null]
     );
-    console.log(`✅ Marcação ${type} registada para employee_id=${employeeId}`);
 
-    // =====================
-    // 🔹 CÁLCULO HORAS MENSAIS
-    // =====================
+    console.log(`📍 Localização guardada para employee_id=${employeeId}: 
+      lat=${latitude}, lng=${longitude}, address=${address}`);
+
+    // ======================================================
+    // 🔹 CÁLCULO DE HORAS MENSAIS (mantido do teu código)
+    // ======================================================
+
     const monthStart = dayjs().startOf('month').format('YYYY-MM-DD');
     const monthEnd = dayjs().endOf('month').format('YYYY-MM-DD');
 
@@ -99,7 +113,6 @@ export default async function handler(req, res) {
          WHERE employee_id = ? AND month_start = ?`,
         [totalHours, overtime, employeeId, monthStart]
       );
-      console.log('🔁 Atualizado registro mensal existente');
     } else {
       await db.execute(
         `INSERT INTO employee_monthly_stats 
@@ -107,15 +120,14 @@ export default async function handler(req, res) {
          VALUES (?, ?, ?, ?, ?)`,
         [employeeId, monthStart, monthEnd, totalHours, overtime]
       );
-      console.log('✅ Criado novo registro mensal');
     }
 
-    res.status(201).json({
+    return res.status(201).json({
       message: `Marcação de ${type} registada com sucesso!`,
-      month: { total: totalHours, overtime }
+      month: { total: totalHours, overtime },
     });
   } catch (error) {
     console.error('❌ Erro ao marcar:', error);
-    res.status(500).json({ message: 'Erro interno do servidor' });
+    return res.status(500).json({ message: 'Erro interno do servidor' });
   }
 }
