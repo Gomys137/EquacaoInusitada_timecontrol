@@ -119,9 +119,25 @@ function DashboardFuncionario() {
         showNotification(data.message || 'Erro ao marcar hora', 'error');
       }
     } catch (err) {
-      console.error('Erro ao marcar hora:', err);
-      showNotification('Ative a localização para marcar a hora.', 'error');
+      console.error("🔴 ERRO AO MARCAR:", err);
+      console.error("🔍 Código:", err.code);
+      console.error("💬 Mensagem:", err.message);
+
+      let msg = "";
+
+      if (err.code === 1) {
+        msg = "Permissão negada! Ativa a localização para este site.";
+      } else if (err.code === 2) {
+        msg = "Localização indisponível! Liga o WiFi ou ativa o GPS.";
+      } else if (err.code === 3) {
+        msg = "Timeout! O dispositivo demorou demasiado a obter a localização.";
+      } else {
+        msg = "Erro inesperado ao obter localização.";
+      }
+
+      showNotification(msg, 'error');
     }
+
   };
 
 
