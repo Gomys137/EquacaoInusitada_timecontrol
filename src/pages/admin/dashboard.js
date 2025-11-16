@@ -22,16 +22,22 @@ function AdminDashboard() {
       const res = await fetch('/api/admin/employees', {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Erro ao carregar funcionários');
-      setEmployees(data.employees);
-      setFiltered(data.employees);
+
+      // 🔥 NÃO MOSTRAR ADMIN
+      const normalEmployees = data.employees.filter(e => e.role !== 'admin');
+
+      setEmployees(normalEmployees);
+      setFiltered(normalEmployees);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   }
+
 
   async function loadMarkings() {
     try {
