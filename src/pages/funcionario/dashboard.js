@@ -66,11 +66,18 @@ function DashboardFuncionario() {
   };
   async function getAddressFromCoords(lat, lng) {
     const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+      {
+        headers: {
+          "User-Agent": "MarcacoesApp/1.0 (contact@example.com)"
+        }
+      }
     );
+
     const data = await res.json();
     return data.display_name || null;
   }
+
 
   const handleMarking = async (type) => {
     try {
