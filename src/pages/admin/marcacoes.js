@@ -48,47 +48,62 @@ function AdminMarcacoes() {
 
                     <table style={styles.table}>
                         <thead>
-                            <tr>
-                                <th style={styles.th}>Localização</th>
-                                <th>Funcionário</th>
-                                <th>Tipo</th>
-                                <th>Hora</th>
-                            </tr>
+                            <th style={styles.th}>Localização</th>
+                            <th>Funcionário</th>
+                            <th>Tipo</th>
+                            <th>Hora</th>
+
                         </thead>
                         <tbody>
                             {markings[date].map(m => (
                                 <tr key={m.marking_id}>
-                                    <td style={styles.name}>{m.employee_name}</td>
+                                    {/* Localização */}
+                                    <td style={styles.td}>
+                                        {m.location ? (
+                                            <>
+                                                <div>{m.location}</div>
+                                                <a
+                                                    href={`https://www.google.com/maps?q=${m.latitude},${m.longitude}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{
+                                                        color: '#2072ac',
+                                                        fontSize: '12px',
+                                                        fontWeight: '600',
+                                                        textDecoration: 'underline'
+                                                    }}
+                                                >
+                                                    Ver no mapa
+                                                </a>
+                                            </>
+                                        ) : (
+                                            <span style={{ color: '#94a3b8', fontSize: '12px' }}>
+                                                Sem localização
+                                            </span>
+                                        )}
+                                    </td>
+
+                                    {/* Funcionário */}
+                                    <td style={styles.name}>
+                                        {m.employee_name}
+                                    </td>
+
+                                    {/* Tipo */}
                                     <td style={m.type === 'entrada' ? styles.entrada : styles.saida}>
                                         {m.type === 'entrada' ? '🟢 Entrada' : '🔴 Saída'}
                                     </td>
+
+                                    {/* Hora */}
                                     <td>
                                         {new Date(m.timestamp).toLocaleTimeString('pt-PT', {
                                             hour: '2-digit',
-                                            minute: '2-digit',
+                                            minute: '2-digit'
                                         })}
                                     </td>
                                 </tr>
                             ))}
-                            <td style={styles.td}>
-                                {m.location ? (
-                                    <>
-                                        <div>{m.location}</div>
-                                        <a
-                                            href={`https://www.google.com/maps?q=${m.latitude},${m.longitude}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{ color: '#2072ac', fontSize: '12px', fontWeight: '600' }}
-                                        >
-                                            Ver no mapa
-                                        </a>
-                                    </>
-                                ) : (
-                                    <span style={{ color: '#94a3b8', fontSize: '12px' }}>Sem localização</span>
-                                )}
-                            </td>
-
                         </tbody>
+
                     </table>
                 </div>
             ))}
