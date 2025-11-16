@@ -48,15 +48,18 @@ function AdminMarcacoes() {
 
                     <table style={styles.table}>
                         <thead>
-                            <th style={styles.th}>Localização</th>
-                            <th>Funcionário</th>
-                            <th>Tipo</th>
-                            <th>Hora</th>
-
+                            <tr>
+                                <th style={styles.th}>Localização</th>
+                                <th style={styles.th}>Funcionário</th>
+                                <th style={styles.th}>Tipo</th>
+                                <th style={styles.th}>Hora</th>
+                            </tr>
                         </thead>
+
                         <tbody>
                             {markings[date].map(m => (
                                 <tr key={m.marking_id}>
+
                                     {/* Localização */}
                                     <td style={styles.td}>
                                         {m.location ? (
@@ -84,9 +87,7 @@ function AdminMarcacoes() {
                                     </td>
 
                                     {/* Funcionário */}
-                                    <td style={styles.name}>
-                                        {m.employee_name}
-                                    </td>
+                                    <td style={styles.name}>{m.employee_name}</td>
 
                                     {/* Tipo */}
                                     <td style={m.type === 'entrada' ? styles.entrada : styles.saida}>
@@ -103,8 +104,8 @@ function AdminMarcacoes() {
                                 </tr>
                             ))}
                         </tbody>
-
                     </table>
+
                 </div>
             ))}
         </div>
